@@ -9,7 +9,7 @@ const HomePage = () => (
       },
       key2: [{ id: 'child3' }, { id: 'child4' }],
     }}
-    onNodeSelected={(e, n) => console.log(e, n)}
+    onNodeSelected={console.log}
   />
 );
 

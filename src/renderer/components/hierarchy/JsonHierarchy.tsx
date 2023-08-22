@@ -6,8 +6,7 @@ const JsonHierarchy = ({
   data,
   onNodeSelected,
 }: JsonHierarchyProps) => {
-  const renderTree = (node: any, path?: string[]) => {
-    path ??= [];
+  const renderTree = (node: any, path: string[] = []) => {
     if (typeof node === 'object' && !Array.isArray(node) && node !== null) {
       const children = Object.entries(node);
       return children.map(([key, val]) => {
@@ -22,8 +21,8 @@ const JsonHierarchy = ({
     }
 
     if (Array.isArray(node)) {
-      return node.map((n) => {
-        const id = [...path, n[nameField]].join('>');
+      return node.map((n, i) => {
+        const id = [...path, i].join('>');
         return <TreeItem key={id} nodeId={id} label={n[nameField]} />;
       });
     }
@@ -35,7 +34,7 @@ const JsonHierarchy = ({
     <TreeView
       defaultCollapseIcon={<ExpandMore />}
       defaultExpandIcon={<ChevronRight />}
-      onNodeSelect={onNodeSelected}
+      onNodeSelect={(_, nodeId: string) => onNodeSelected(nodeId)}
       sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
     >
       {renderTree(data)}
@@ -46,7 +45,7 @@ const JsonHierarchy = ({
 export interface JsonHierarchyProps {
   nameField: string;
   data: Record<string, unknown>;
-  onNodeSelected: (event: React.SyntheticEvent, nodeIds: string[]) => void;
+  onNodeSelected: (nodeId: string) => void;
 }
 
 export default JsonHierarchy;
