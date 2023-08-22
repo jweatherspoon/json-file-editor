@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 import { TabInfo } from '../../models/tab-info';
 
-const TabControl = ({ tabs }: TabControlProps) => {
-  const [selectedTab, setSelectedTab] = useState('');
-  const handleChange = (_, id: string) => setSelectedTab(id);
+const TabControl = ({ tabs, selectedTab, onTabChange }: TabControlProps) => {
+  const handleChange = (_, id: string) => onTabChange(id);
 
   const tabComponents = tabs.map((t) => (
     <Tab
@@ -17,7 +15,7 @@ const TabControl = ({ tabs }: TabControlProps) => {
 
   const tabPanels = tabs.map((t) => (
     <TabPanel key={`${t.id}-panel`} value={t.id}>
-      {t.label}
+      {t.content}
     </TabPanel>
   ));
 
@@ -35,6 +33,8 @@ const TabControl = ({ tabs }: TabControlProps) => {
 
 export interface TabControlProps {
   tabs: TabInfo[];
+  selectedTab: string;
+  onTabChange: (id: string) => void;
 }
 
 export default TabControl;
