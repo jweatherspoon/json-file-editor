@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { FileInfo } from '../../../shared/models/file-info.interface';
 import { Channels } from '../../../shared/models/ipc';
 import JsonHierarchy from '../hierarchy/JsonHierarchy';
+import ObjectEditor from '../file-editor/object-editor';
 
 const useFileData = (id: string) => {
+  const [info, setInfo] = useState(null);
   const [fileData, setFileData] = useState(null);
 
   useEffect(() => {
@@ -13,6 +15,8 @@ const useFileData = (id: string) => {
         Channels.GetFileInfo,
         { payload: id }
       );
+
+      setInfo(fileInfo.payload);
 
       const contents = await window.electron.ipcRenderer.sendAsync(
         Channels.LoadFile,
@@ -24,18 +28,31 @@ const useFileData = (id: string) => {
     })();
   }, [id]);
 
-  return fileData;
+  return [info, fileData];
 };
 
 const FileEditorPage = ({ id }: FileEditorPageProps) => {
-  const fileData = useFileData(id);
-  const onNodeSelected = (nodeId: string) => console.log(nodeId);
+  const [path, setPath] = useState<string | null>(null);
+  const [fileInfo, fileData] = useFileData(id);
+  const onNodeSelected = (nodeId: string) => setPath(nodeId);
 
   // if schema is empty, show configurator
   // if schema is not empty, show selected object
 
+  const pathTokens = path?.split('>');
+  const isLeaf =
+    pathTokens &&
+    Number.isFinite(parseInt(pathTokens[pathTokens.length - 1], 10));
+
+  const node = isLeaf
+    ? pathTokens.reduce(
+        (o, k) => o && o[k],
+        fileData ?? ({} as Record<string, any>)
+      )
+    : null;
+
   return (
-    <Box>
+    <Stack direction="row" gap={1}>
       {fileData ? (
         <JsonHierarchy
           data={fileData}
@@ -43,7 +60,14 @@ const FileEditorPage = ({ id }: FileEditorPageProps) => {
           onNodeSelected={onNodeSelected}
         />
       ) : null}
-    </Box>
+      {node && fileInfo?.schema ? (
+        <ObjectEditor
+          schema={fileInfo.schema}
+          obj={node}
+          onChange={console.log}
+        />
+      ) : null}
+    </Stack>
   );
 };
 
