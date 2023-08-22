@@ -3,4 +3,5 @@ export const ServiceIdentifier = {
   MessageHandler: Symbol.for('message-handler'),
   MessageHandlerFactory: Symbol.for('message-handler-factory'),
   Ipc: Symbol.for('ipc'),
+  Store: Symbol.for('store'),
 };

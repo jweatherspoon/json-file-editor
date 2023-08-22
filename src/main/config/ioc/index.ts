@@ -1,4 +1,5 @@
 import { Container } from 'inversify';
+import Store from 'electron-store';
 import { ServiceIdentifier } from './service-identifiers';
 import { Logger } from '../../util/logger';
 import { Ipc } from '../../communication/ipc';
@@ -9,6 +10,9 @@ import {
 import { MessageHandler } from '../../communication/interfaces/message-handler';
 
 const ioc = new Container();
+
+const store = new Store();
+ioc.bind(ServiceIdentifier.Store).toConstantValue(store);
 
 ioc.bind(ServiceIdentifier.Logger).to(Logger).inSingletonScope();
 ioc.bind(ServiceIdentifier.Ipc).to(Ipc).inSingletonScope();
