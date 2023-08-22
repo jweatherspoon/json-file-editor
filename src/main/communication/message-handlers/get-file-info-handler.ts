@@ -5,19 +5,21 @@ import { Channels, IpcMessage } from '../../../shared/models/ipc';
 import { ServiceIdentifier } from '../../config/ioc/service-identifiers';
 
 @injectable()
-export class GetConfigMessageHandler implements MessageHandler {
-  readonly id: string = Channels.GetConfig;
+export class GetFileInfoMessageHandler implements MessageHandler {
+  readonly id: string = Channels.GetFileInfo;
 
   constructor(
     @inject(ServiceIdentifier.Store) private readonly store: ElectronStore
   ) {}
 
   async handle(msg: IpcMessage<any>): Promise<any> {
-    const configs = this.store.get('config', []) as Record<string, any>[];
-    if (msg.payload) {
-      return configs?.find((x) => x.id === msg.payload) ?? {};
-    }
+    const key = `fileInfo.${msg.payload}`;
+    const info = this.store.get(key, {
+      path: null,
+      schema: [],
+      nameField: null,
+    });
 
-    return configs;
+    return info;
   }
 }

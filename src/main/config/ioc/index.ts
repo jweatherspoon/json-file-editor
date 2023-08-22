@@ -11,7 +11,8 @@ import { MessageHandler } from '../../communication/interfaces/message-handler';
 
 const ioc = new Container();
 
-const store = new Store();
+const store = new Store({ name: 'json-editor-config' });
+// store.set('config', [{ id: 'parser-metadata', label: 'Tables' }]);
 ioc.bind(ServiceIdentifier.Store).toConstantValue(store);
 
 ioc.bind(ServiceIdentifier.Logger).to(Logger).inSingletonScope();

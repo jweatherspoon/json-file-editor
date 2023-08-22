@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Channels, IpcMessage } from '../../shared/models/ipc';
 
-function useIpc<T = any>(channel: Channels, msg: IpcMessage) {
+function useIpc<T = any>(channel: Channels, msg?: IpcMessage) {
   const [data, setData] = useState<T | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshFlag, setRefreshFlag] = useState(true);
@@ -12,7 +12,7 @@ function useIpc<T = any>(channel: Channels, msg: IpcMessage) {
     (async () => {
       const response = await window.electron.ipcRenderer.sendAsync<T>(
         channel,
-        msg
+        msg ?? { payload: null }
       );
 
       setData(response.payload);
