@@ -156,6 +156,7 @@ const FileEditorPage = ({
           disabled={!hasChanges}
           onClick={onSave}
           fullWidth
+          variant="contained"
           sx={{ bottom: 2, position: 'absolute', margin: 'auto' }}
         >
           Save Changes

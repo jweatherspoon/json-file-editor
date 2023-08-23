@@ -1,5 +1,6 @@
 import { FieldSchema } from '../../../shared/models/file-info.interface';
 import { EditorProps } from '../../models/editor-props';
+import ArrayEditor from './editors/array-editor';
 import BooleanEditor from './editors/boolean-editor';
 import DropdownEditor from './editors/dropdown-editor';
 import StringEditor from './editors/string-editor';
@@ -15,6 +16,10 @@ const FieldEditor = ({ schema, editorProps }: FieldEditorProps) => {
 
   if (schema.type === 'enum') {
     return <DropdownEditor {...editorProps} />;
+  }
+
+  if (schema.type === 'array') {
+    return <ArrayEditor {...editorProps} />;
   }
 
   return null;

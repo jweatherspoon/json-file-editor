@@ -20,7 +20,6 @@ export default function App() {
     {
       id: 'add-new-tab',
       label: '+',
-      disabled: true,
     },
   ];
 
@@ -43,6 +42,7 @@ export default function App() {
   });
 
   const handleChange = (id: string) => {
+    setHasChanges(false);
     const newTabIndex = navConfig.findIndex((t) => t.id === id);
     setSelectedTab(newTabIndex);
   };

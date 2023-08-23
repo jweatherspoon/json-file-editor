@@ -1,6 +1,6 @@
-import { ExpandMore, ChevronRight } from '@mui/icons-material';
+import { ExpandMore, ChevronRight, Add, CopyAll } from '@mui/icons-material';
 import { TreeItem, TreeView } from '@mui/lab';
-import { Button, ButtonGroup, Stack } from '@mui/material';
+import { Button, ButtonGroup, Stack, Tooltip } from '@mui/material';
 
 const JsonHierarchy = ({
   nameField,
@@ -44,11 +44,17 @@ const JsonHierarchy = ({
 
   return (
     <Stack sx={{ height: '100%' }}>
-      <ButtonGroup variant="outlined">
-        <Button onClick={copyJsonToClipboard}>Copy JSON</Button>
-        <Button onClick={addObject} disabled={!canAddObject}>
-          New
-        </Button>
+      <ButtonGroup variant="contained" sx={{ justifyContent: 'flex-end' }}>
+        <Tooltip title="Copy JSON to clipboard">
+          <Button onClick={copyJsonToClipboard}>
+            <CopyAll />
+          </Button>
+        </Tooltip>
+        <Tooltip title="Add new object">
+          <Button onClick={addObject} disabled={!canAddObject}>
+            <Add />
+          </Button>
+        </Tooltip>
       </ButtonGroup>
       <TreeView
         defaultCollapseIcon={<ExpandMore />}
