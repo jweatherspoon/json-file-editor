@@ -36,7 +36,8 @@ const JsonHierarchy = ({
       defaultExpandIcon={<ChevronRight />}
       onNodeSelect={(_, nodeId: string) => onNodeSelected(nodeId)}
       sx={{
-        height: 1,
+        height: '100%',
+        minWidth: 250,
         flexGrow: 1,
         maxWidth: 250,
         overflowY: 'auto',

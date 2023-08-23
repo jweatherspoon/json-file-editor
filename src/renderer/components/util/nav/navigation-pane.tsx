@@ -26,7 +26,7 @@ export const NavigationPane = ({ config, width }: NavigationProps) => {
       <Divider />
       {mainNavItems}
 
-      <Box sx={{ position: 'absolute', bottom: 0, width: 1 }}>
+      <Box sx={{ position: 'absolute', bottom: 0, width: '100%' }}>
         <Divider />
         {bottomNavItems}
       </Box>

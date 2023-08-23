@@ -5,4 +5,5 @@ export interface TabInfo {
   label: string;
   hasChanges?: boolean;
   content?: ReactNode;
+  disabled?: boolean;
 }

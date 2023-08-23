@@ -7,6 +7,7 @@ import { Channels } from '../shared/models/ipc';
 import { TabInfo } from './models/tab-info';
 import AddNewConfigPage from './components/pages/add-new-config';
 import FileEditorPage from './components/pages/file-editor-page';
+import './App.css';
 
 export default function App() {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -19,14 +20,27 @@ export default function App() {
     {
       id: 'add-new-tab',
       label: '+',
+      disabled: true,
     },
   ];
 
   const tabId = navConfig[selectedTab].id;
 
-  const tabs = navConfig.map((t) => (
-    <Tab key={t.id} value={t.id} label={`${t.label}${hasChanges ? '*' : ''}`} />
-  ));
+  const tabs = navConfig.map((t) => {
+    const labelTokens = [t.label];
+    if (t.id === tabId && hasChanges) {
+      labelTokens.push('*');
+    }
+
+    return (
+      <Tab
+        key={t.id}
+        value={t.id}
+        label={labelTokens.join(' ')}
+        disabled={t.disabled}
+      />
+    );
+  });
 
   const handleChange = (id: string) => {
     const newTabIndex = navConfig.findIndex((t) => t.id === id);
@@ -46,7 +60,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Stack direction="column" gap={2}>
+      <Stack direction="column" gap={2} sx={{ height: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={tabId} onChange={(_, id) => handleChange(id)}>
             {tabs}

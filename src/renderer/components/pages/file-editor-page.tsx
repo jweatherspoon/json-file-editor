@@ -103,7 +103,11 @@ const FileEditorPage = ({
   };
 
   return (
-    <Stack direction="row" gap={1}>
+    <Stack
+      direction="row"
+      gap={1}
+      sx={{ height: '90%', width: '98vw', pl: 1, pr: 1 }}
+    >
       {fileData ? (
         <JsonHierarchy
           data={fileData}
@@ -111,12 +115,25 @@ const FileEditorPage = ({
           onNodeSelected={onNodeSelected}
         />
       ) : null}
-      {node && fileInfo?.schema ? (
-        <ObjectEditor schema={fileInfo.schema} obj={node} onChange={onChange} />
-      ) : null}
-      <Button disabled={!hasChanges} onClick={onSave}>
-        Save Changes
-      </Button>
+      <Stack
+        sx={{ height: '100%', flexGrow: 1, width: '80%', position: 'relative' }}
+      >
+        {node && fileInfo?.schema ? (
+          <ObjectEditor
+            schema={fileInfo.schema}
+            obj={node}
+            onChange={onChange}
+          />
+        ) : null}
+        <Button
+          disabled={!hasChanges}
+          onClick={onSave}
+          fullWidth
+          sx={{ bottom: 2, position: 'absolute', margin: 'auto' }}
+        >
+          Save Changes
+        </Button>
+      </Stack>
     </Stack>
   );
 };
