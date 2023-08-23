@@ -1,4 +1,9 @@
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import {
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material';
 import { EditorProps } from '../../../models/editor-props';
 
 const ArrayEditor = ({
@@ -14,13 +19,16 @@ const ArrayEditor = ({
   ));
 
   return (
-    <ToggleButtonGroup
-      orientation="vertical"
-      value={value ?? []}
-      onChange={(_, v) => onChange(v)}
-    >
-      {choices}
-    </ToggleButtonGroup>
+    <Stack>
+      <Typography variant="body1">{field}</Typography>
+      <ToggleButtonGroup
+        orientation="vertical"
+        value={value ?? []}
+        onChange={(_, v) => onChange(v)}
+      >
+        {choices}
+      </ToggleButtonGroup>
+    </Stack>
   );
 };
 

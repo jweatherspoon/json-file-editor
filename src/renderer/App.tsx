@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Stack } from '@mui/system';
 import { Box, Tab, Tabs, ThemeProvider } from '@mui/material';
+import { Settings } from '@mui/icons-material';
 import { theme } from './config/theme';
 import { useIpc } from './hooks/useIpc';
 import { Channels } from '../shared/models/ipc';
@@ -14,13 +15,13 @@ export default function App() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [hasChanges, setHasChanges] = useState(false);
 
-  const { isLoading, data } = useIpc<TabInfo[]>(Channels.GetConfig);
+  const { data } = useIpc<TabInfo[]>(Channels.GetConfig);
 
   const navConfig = [
     ...(data ?? []),
     {
       id: 'add-new-tab',
-      label: '+',
+      icon: <Settings />,
     },
   ];
 
@@ -32,11 +33,14 @@ export default function App() {
       labelTokens.push('*');
     }
 
+    const label = labelTokens.join(' ');
+
     return (
       <Tab
         key={t.id}
         value={t.id}
-        label={labelTokens.join(' ')}
+        icon={t.icon && t.icon}
+        label={label && label}
         disabled={t.disabled}
       />
     );

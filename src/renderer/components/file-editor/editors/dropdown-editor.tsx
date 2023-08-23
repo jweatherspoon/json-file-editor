@@ -1,4 +1,4 @@
-import { MenuItem, Select } from '@mui/material';
+import { FormGroup, InputLabel, MenuItem, Select } from '@mui/material';
 import { EditorProps } from '../../../models/editor-props';
 
 const DropdownEditor = ({
@@ -8,7 +8,7 @@ const DropdownEditor = ({
   options,
 }: EditorProps<string>) => {
   const menuItems = [
-    <MenuItem key="no-value" value={undefined}>
+    <MenuItem key="no-value" value="">
       None
     </MenuItem>,
     ...(options ?? []).map((o) => (
@@ -18,14 +18,20 @@ const DropdownEditor = ({
     )),
   ];
 
+  const labelId = `${field}-label`;
+
   return (
-    <Select
-      label={field}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    >
-      {menuItems}
-    </Select>
+    <FormGroup>
+      <InputLabel id={labelId}>{field}</InputLabel>
+      <Select
+        labelId={labelId}
+        label={field}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        {menuItems}
+      </Select>
+    </FormGroup>
   );
 };
 
