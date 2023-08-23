@@ -1,6 +1,7 @@
 import { Stack } from '@mui/material';
 import { FieldSchema } from '../../../shared/models/file-info.interface';
 import FieldEditor from './field-editor';
+import AdditionalPropertiesEditor from './editors/additional-properties-editor';
 
 const ObjectEditor = ({ schema, obj, onChange }: ObjectEditorProps) => {
   if (!obj) {
@@ -20,9 +21,21 @@ const ObjectEditor = ({ schema, obj, onChange }: ObjectEditorProps) => {
     />
   ));
 
+  const additionalProperties = Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !schema.find((s) => s.id === key))
+  );
+
+  const onAdditionalPropertiesChanged = (o: Record<string, any>) => {
+    Object.entries(o).forEach(([key, val]) => onChange(key, val));
+  };
+
   return (
     <Stack direction="column" gap={1}>
       {editors}
+      <AdditionalPropertiesEditor
+        onChange={onAdditionalPropertiesChanged}
+        data={additionalProperties}
+      />
     </Stack>
   );
 };
