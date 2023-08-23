@@ -71,7 +71,31 @@ const useFileData = (id: string) => {
       })
       .then((result) => result.payload as boolean);
 
-  return [info, fileData, updateNode, saveChanges];
+  const addNewObject = (path: string, nameField: string) => {
+    if (!fileData || !path || !nameField) {
+      return;
+    }
+
+    const pathTokens = path.split('>');
+    const dataCopy = structuredClone(fileData);
+    let parent = dataCopy;
+    for (let i = 0; i < pathTokens.length - 1; i++) {
+      parent = parent[pathTokens[i]];
+    }
+
+    // if parent value is an array, add the object there
+    if (!Array.isArray(parent)) {
+      parent = parent[pathTokens[pathTokens.length - 1]];
+    }
+
+    if (Array.isArray(parent)) {
+      const newObject = { [nameField]: 'new-object' };
+      parent.push(newObject);
+      setFileData(dataCopy);
+    }
+  };
+
+  return [info, fileData, updateNode, saveChanges, addNewObject];
 };
 
 const FileEditorPage = ({
@@ -80,7 +104,8 @@ const FileEditorPage = ({
   setHasChanges,
 }: FileEditorPageProps) => {
   const [path, setPath] = useState<string | null>(null);
-  const [fileInfo, fileData, updateNode, saveChanges] = useFileData(id);
+  const [fileInfo, fileData, updateNode, saveChanges, addNewObject] =
+    useFileData(id);
   const onNodeSelected = (nodeId: string) => setPath(nodeId);
 
   // if schema is empty, show configurator
@@ -113,6 +138,8 @@ const FileEditorPage = ({
           data={fileData}
           nameField="id"
           onNodeSelected={onNodeSelected}
+          canAddObject={!!node}
+          addObject={() => addNewObject(path, fileInfo?.nameField)}
         />
       ) : null}
       <Stack
