@@ -1,3 +1,4 @@
+import { Stack } from '@mui/material';
 import { FieldSchema } from '../../../shared/models/file-info.interface';
 import FieldEditor from './field-editor';
 
@@ -8,13 +9,14 @@ const ObjectEditor = ({ schema, obj, onChange }: ObjectEditorProps) => {
       schema={x}
       editorProps={{
         field: x.id,
-        value: obj[x.id],
+        value: obj[x.id] ?? '',
         onChange: (newValue) => onChange(x.id, newValue),
+        options: x.options,
       }}
     />
   ));
 
-  return <>{editors}</>;
+  return <Stack direction="column">{editors}</Stack>;
 };
 
 export interface ObjectEditorProps {

@@ -37,7 +37,11 @@ export default function App() {
     tabId === 'add-new-tab' ? (
       <AddNewConfigPage />
     ) : (
-      <FileEditorPage id={tabId} />
+      <FileEditorPage
+        id={tabId}
+        hasChanges={hasChanges}
+        setHasChanges={setHasChanges}
+      />
     );
 
   return (

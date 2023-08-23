@@ -3,6 +3,7 @@ export enum Channels {
   GetConfig = 'get-config',
   GetFileInfo = 'get-file-info',
   LoadFile = 'load-file',
+  SaveFile = 'save-file',
 }
 
 export interface IpcMessage<T = any> {
