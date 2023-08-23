@@ -3,6 +3,10 @@ import { FieldSchema } from '../../../shared/models/file-info.interface';
 import FieldEditor from './field-editor';
 
 const ObjectEditor = ({ schema, obj, onChange }: ObjectEditorProps) => {
+  if (!obj) {
+    return null;
+  }
+
   const editors = schema.map((x) => (
     <FieldEditor
       key={`${x.id}-editor`}
@@ -16,7 +20,11 @@ const ObjectEditor = ({ schema, obj, onChange }: ObjectEditorProps) => {
     />
   ));
 
-  return <Stack direction="column">{editors}</Stack>;
+  return (
+    <Stack direction="column" gap={1}>
+      {editors}
+    </Stack>
+  );
 };
 
 export interface ObjectEditorProps {

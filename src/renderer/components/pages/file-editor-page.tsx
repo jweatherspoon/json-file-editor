@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Box, Button, Stack } from '@mui/material';
-import { FileInfo } from '../../../shared/models/file-info.interface';
+import { useEffect, useMemo, useState } from 'react';
+import { Button, Stack } from '@mui/material';
 import { Channels } from '../../../shared/models/ipc';
 import JsonHierarchy from '../hierarchy/JsonHierarchy';
 import ObjectEditor from '../file-editor/object-editor';
 
 const getNode = (data: Record<string, any> | null, path: string | null) => {
   if (!data || !path) {
-    return null;
+    return [];
   }
 
   const pathTokens = path.split('>');
@@ -15,7 +14,7 @@ const getNode = (data: Record<string, any> | null, path: string | null) => {
     pathTokens &&
     Number.isFinite(parseInt(pathTokens[pathTokens.length - 1], 10));
 
-  return isLeaf ? pathTokens.reduce((o, k) => o && o[k], data) : null;
+  return [pathTokens.reduce((o, k) => o && o[k], data), isLeaf];
 };
 
 const useFileData = (id: string) => {
@@ -42,8 +41,8 @@ const useFileData = (id: string) => {
   }, [id]);
 
   const updateNode = (path: string, field: string, newValue: any) => {
-    const targetNode = getNode(fileData, path);
-    if (!targetNode) {
+    const [targetNode, isLeaf] = getNode(fileData, path);
+    if (!isLeaf || !targetNode) {
       return false;
     }
 
@@ -102,16 +101,17 @@ const FileEditorPage = ({
   id,
   hasChanges,
   setHasChanges,
+  path,
+  setPath,
 }: FileEditorPageProps) => {
-  const [path, setPath] = useState<string | null>(null);
   const [fileInfo, fileData, updateNode, saveChanges, addNewObject] =
     useFileData(id);
   const onNodeSelected = (nodeId: string) => setPath(nodeId);
 
-  // if schema is empty, show configurator
-  // if schema is not empty, show selected object
-
-  const node = getNode(fileData ?? {}, path);
+  const [node, isLeaf] = useMemo(
+    () => getNode(fileData ?? {}, path),
+    [fileData, path]
+  );
 
   const onChange = (field: string, newValue: any) => {
     const changed = updateNode(path!, field, newValue);
@@ -138,14 +138,14 @@ const FileEditorPage = ({
           data={fileData}
           nameField="id"
           onNodeSelected={onNodeSelected}
-          canAddObject={!!node}
+          canAddObject={isLeaf || Array.isArray(node)}
           addObject={() => addNewObject(path, fileInfo?.nameField)}
         />
       ) : null}
       <Stack
         sx={{ height: '100%', flexGrow: 1, width: '80%', position: 'relative' }}
       >
-        {node && fileInfo?.schema ? (
+        {isLeaf && fileInfo?.schema ? (
           <ObjectEditor
             schema={fileInfo.schema}
             obj={node}
@@ -170,6 +170,8 @@ export interface FileEditorPageProps {
   id: string;
   hasChanges: boolean;
   setHasChanges: (hc: boolean) => void;
+  path: string | null;
+  setPath: (newPath: string | null) => void;
 }
 
 export default FileEditorPage;

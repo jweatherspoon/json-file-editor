@@ -10,6 +10,7 @@ import FileEditorPage from './components/pages/file-editor-page';
 import './App.css';
 
 export default function App() {
+  const [path, setPath] = useState<string | null>(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -42,6 +43,7 @@ export default function App() {
   });
 
   const handleChange = (id: string) => {
+    setPath(null);
     setHasChanges(false);
     const newTabIndex = navConfig.findIndex((t) => t.id === id);
     setSelectedTab(newTabIndex);
@@ -55,6 +57,8 @@ export default function App() {
         id={tabId}
         hasChanges={hasChanges}
         setHasChanges={setHasChanges}
+        path={path}
+        setPath={setPath}
       />
     );
 

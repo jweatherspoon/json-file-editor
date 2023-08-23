@@ -9,7 +9,7 @@ const ArrayEditor = ({
 }: EditorProps<string[]>) => {
   const choices = options?.map((o) => (
     <ToggleButton value={o} key={o}>
-      o
+      {o}
     </ToggleButton>
   ));
 
