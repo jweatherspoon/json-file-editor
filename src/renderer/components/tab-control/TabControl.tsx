@@ -22,9 +22,7 @@ const TabControl = ({ tabs, selectedTab, onTabChange }: TabControlProps) => {
   return (
     <TabContext value={selectedTab}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <TabList onChange={handleChange} aria-label="lab API tabs example">
-          {tabComponents}
-        </TabList>
+        <TabList onChange={handleChange}>{tabComponents}</TabList>
       </Box>
       {tabPanels}
     </TabContext>

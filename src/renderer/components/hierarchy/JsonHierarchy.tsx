@@ -35,7 +35,13 @@ const JsonHierarchy = ({
       defaultCollapseIcon={<ExpandMore />}
       defaultExpandIcon={<ChevronRight />}
       onNodeSelect={(_, nodeId: string) => onNodeSelected(nodeId)}
-      sx={{ height: 1, flexGrow: 1, maxWidth: 250, overflowY: 'auto' }}
+      sx={{
+        height: 1,
+        flexGrow: 1,
+        maxWidth: 250,
+        overflowY: 'auto',
+        border: '1px solid black',
+      }}
     >
       {renderTree(data)}
     </TreeView>

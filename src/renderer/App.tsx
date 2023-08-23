@@ -42,7 +42,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Stack direction="column">
+      <Stack direction="column" gap={2}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={tabId} onChange={(_, id) => handleChange(id)}>
             {tabs}
